@@ -41,6 +41,6 @@ def delete_nodes(node_id: int):
         node= session.get(Node, node_id)
         if not node:
             raise HTTPException(status_code=404, detail="Node not found")
-            session.delete(node)
-            session.commit()
-            return {"Successful":"Deleted node"}
+    session.delete(node)
+    session.commit()
+    return {"Successful":"Deleted node"}
