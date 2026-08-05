@@ -43,9 +43,9 @@ def get_specific_node(node_id: int):
 
 
 @app.patch("/nodes/{node_id}")
-def update_specific_node(node_id: int):
+def update_specific_node(node: Node):
     with Session(engine) as session:
-        node=session.patch(Node, node_id)
+        node=session.patch(Node)
         if not node:
             raise HTTPException(status_code=404, detail="Node not found")
         return node
