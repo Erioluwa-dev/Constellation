@@ -1,10 +1,8 @@
-from platform import node
-from fastapi import HTTPException
 
+from fastapi import HTTPException
 from fastapi import FastAPI
-from sqlalchemy.sql.roles import LimitOffsetRole
-from sqlalchemy.sql.util import _offset_or_limit_clause
 from sqlmodel import Session, select
+
 from database import engine
 from models import Node
 
@@ -33,6 +31,25 @@ def list_nodes():
     with Session(engine) as session:
         nodes = session.exec(select(Node)).all()
         return nodes
+
+
+@app.get("/nodes/{node_id}")
+def get_specific_node(node_id: int):
+    with Session(engine) as session:
+        node= session.get(Node, node_id)
+        if not node:
+            raise HTTPException(status_code=404, detail="Node not found")
+        return node
+
+
+@app.patch("/nodes/{node_id}")
+def update_specific_node(node_id: int):
+    with Session(engine) as session:
+        node=session.patch(Node, node_id)
+        if not node:
+            raise HTTPException(status_code=404, detail="Node not found")
+        return node
+
 
 
 @app.delete("/nodes/{node_id}")
