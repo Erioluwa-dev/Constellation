@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 from database import engine
 from models import Node
 from models import NodeUpdate
+from models import Edge
 
 
 app = FastAPI(title="Constellation API")
@@ -70,3 +71,21 @@ def delete_nodes(node_id: int):
         session.delete(node)
         session.commit()
         return {"Successful":"Deleted node"}
+
+
+#Edges
+
+@app.post("/edges")
+def create_edge(edge: Edge):
+    with Session(engine) as session:
+        session.add(edge)
+        session.commit()
+        session.refresh(edge)
+        return edge
+
+
+@app.get("/edges")
+def list_edges():
+    with Session(engine) as session:
+        edge= session.exec(select(Edge)).all())
+        return edge
