@@ -15,3 +15,8 @@ class Edge(SQLModel, table=True):
     source_id: int = Field(foreign_key="node.id")
     target_id: int = Field(foreign_key="node.id")
     shared_tag: str
+
+class NodeUpdate(SQLModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    tags: Optional[str] = None
