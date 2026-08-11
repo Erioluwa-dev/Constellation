@@ -87,7 +87,7 @@ def create_edge(edge: Edge):
 @app.get("/edges")
 def list_edges():
     with Session(engine) as session:
-        edge= session.exec(select(Edge)).all())
+        edge= session.exec(select(Edge)).all()
         return edge
 
 @app.get("/edges/{edge_id}")
@@ -99,7 +99,7 @@ def list_specific_edge(edge_id: int):
         return edge
 
 @app.delete("/edges/{edge_id}")
-def delete_nodes(edge_id: int):
+def delete_edges(edge_id: int):
     with Session(engine) as session:
         edge= session.get(Edge, edge_id)
         if not edge:
