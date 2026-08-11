@@ -5,6 +5,7 @@ from sqlmodel import Session, select
 
 from database import engine
 from models import Node
+from models import NodeUpdate
 
 
 app = FastAPI(title="Constellation API")
@@ -43,11 +44,19 @@ def get_specific_node(node_id: int):
 
 
 @app.patch("/nodes/{node_id}")
-def update_specific_node(node: Node):
+def update_node(node_id: int, node_update: NodeUpdate):
     with Session(engine) as session:
-        node=session.patch(Node)
+        node = session.get(Node, node_id)
         if not node:
             raise HTTPException(status_code=404, detail="Node not found")
+
+        update_data = node_update.model_dump(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(node, key, value)
+
+        session.add(node)
+        session.commit()
+        session.refresh(node)
         return node
 
 
