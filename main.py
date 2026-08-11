@@ -89,3 +89,21 @@ def list_edges():
     with Session(engine) as session:
         edge= session.exec(select(Edge)).all())
         return edge
+
+@app.get("/edges/{edge_id}")
+def list_specific_edge(edge_id: int):
+    with Session(engine) as session:
+        edge= session.get(Edge, edge_id)
+        if not edge:
+            raise HTTPException (status_code=404, detail="Edge not found")
+        return edge
+
+@app.delete("/edges/{edge_id}")
+def delete_nodes(edge_id: int):
+    with Session(engine) as session:
+        edge= session.get(Edge, edge_id)
+        if not edge:
+            raise HTTPException(status_code=404, detail="Edge not found")
+        session.delete(edge)
+        session.commit()
+        return {"Successful":"Deleted edge"}
