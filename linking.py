@@ -15,3 +15,5 @@ def find_shared_tags(tags1: str, tags2: str) -> set:
 
     shared = tags1_set & tags2_set
     return shared
+
+
